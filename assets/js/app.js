@@ -15,19 +15,24 @@ const deleteCard = (event) => {
   cardElement.remove();
 }
 
+/* Não funciona */
 const editCard = (event) => {
   const cardElement = event.target.closest('.card');
 
+  toggleCreationBoxView();
   const question = getInputs();
   let {questionText, answerText} = question;
 
-  cardElement.querySelector('.question-div').textContent = questionText;
-  cardElement.querySelector('.answer-div').textContent = answerText;
+  const questionInput = cardElement.querySelector('.question-div');
+  const answerInput = cardElement.querySelector('.answer-div');
+
+  questionInput.textContent = questionText;
+  answerInput.textContent = answerText;
+
+  //cardElement.remove();
 };
 
 const createCard = (questionText, answerText) => {
-  toggleCreationBoxView();
-
   /* Cartão */
   const cardElement = document.createElement('div');
   cardElement.classList.add('card');
@@ -57,9 +62,7 @@ const createCard = (questionText, answerText) => {
   const editionIcon = document.createElement('i');
   editionIcon.classList.add('bi', 'bi-pencil-square');
   editionButton.appendChild(editionIcon);
-  //editionButton.addEventListener('click', editCard(event.target));
   editionButton.addEventListener('click', editCard);
-  //editionButton.addEventListener('click', (event) => editCard(event));
 
   /* Botão de remoção de cartão */
   const deletionButton = document.createElement('button');
@@ -68,9 +71,7 @@ const createCard = (questionText, answerText) => {
   const deletionIcon = document.createElement('i');
   deletionIcon.classList.add('bi', 'bi-trash');
   deletionButton.appendChild(deletionIcon);
-  //deletionButton.addEventListener('click', deleteCard(event.target));
   deletionButton.addEventListener('click', deleteCard);
-  //deletionButton.addEventListener('click', (event) => deleteCard(event));
 
   /* Container de botões de edição e exclusão */
   const buttonsContainer = document.createElement('div');
@@ -86,12 +87,33 @@ const createCard = (questionText, answerText) => {
   return cardElement;
 }
 
+const loadCards = () => {
+  const storedCards = JSON.parse(localStorage.getItem('cards'));
+
+  if (storedCards) {
+    for (const storedCard of storedCards) {
+      cards.push(storedCard)
+      let {questionText, answerText} = storedCard;
+      addCard(questionText, answerText);
+    }
+  }
+}
+
+window.addEventListener('load', loadCards);
+
+const clearInputs = () => {
+  const questionInput = document.querySelector('#question');
+  const answerInput = document.querySelector('#answer');
+  questionInput.value = '';
+  answerInput.value = '';
+}
+
 const getInputs = () => {
-  toggleCreationBoxView();
   const questionInput = document.querySelector('#question');
   const answerInput = document.querySelector('#answer');
   let questionText = questionInput.value;
   let answerText = answerInput.value;
+  clearInputs();
 
   return {questionText: questionText, answerText: answerText};
 }
@@ -110,4 +132,7 @@ saveButton.addEventListener('click', () => {
   toggleCreationBoxView();
   let {questionText, answerText} = question;
   addCard(questionText, answerText);
+  /* Adiciona objeto ao array e armazena este localmente */
+  cards.push({ questionText: questionText, answerText: answerText });
+  localStorage.setItem('cards', JSON.stringify(cards));
 });
