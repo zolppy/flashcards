@@ -9,13 +9,20 @@ const toggleCreationBoxView = () => {
   creationBoxElement.classList.toggle('hide');
 }
 
+/* Remove elementos do DOM, do array e do armazenamento local */
 const deleteCard = (event) => {
   const cardElement = event.target.closest('.card');
+  const questionInput = cardElement.querySelector('.question-div');
+  const answerInput = cardElement.querySelector('.answer-div');
+  let index = cards.indexOf({questionText: questionInput.value, answerText: answerInput.value});
+  cards.splice(index, 1);
+
+  localStorage.setItem('cards', JSON.stringify(cards));
 
   cardElement.remove();
 }
 
-/* Não funciona */
+/* Não é a melhor solução */
 const editCard = (event) => {
   const cardElement = event.target.closest('.card');
 
@@ -29,7 +36,7 @@ const editCard = (event) => {
   questionInput.textContent = questionText;
   answerInput.textContent = answerText;
 
-  //cardElement.remove();
+  deleteCard(event);
 };
 
 const createCard = (questionText, answerText) => {
@@ -99,8 +106,6 @@ const loadCards = () => {
   }
 }
 
-window.addEventListener('load', loadCards);
-
 const clearInputs = () => {
   const questionInput = document.querySelector('#question');
   const answerInput = document.querySelector('#answer');
@@ -125,6 +130,7 @@ const addCard = (questionText, answerText) => {
   cardsContainer.appendChild(card);
 }
 
+window.addEventListener('load', loadCards);
 addCardButton.addEventListener('click', toggleCreationBoxView);
 closeCreationBoxButton.addEventListener('click', toggleCreationBoxView);
 saveButton.addEventListener('click', () => {
