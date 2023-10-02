@@ -15,15 +15,15 @@ const deleteCard = (event) => {
   cardElement.remove();
 }
 
-/* Cria um cartão com novos valores e remove o cartão com valores antigos */
 const editCard = (event) => {
+  const cardElement = event.target.closest('.card');
+
   const question = getInputs();
   let {questionText, answerText} = question;
-  
-  addCard(questionText, answerText);
-  deleteCard(event);
-}
 
+  cardElement.querySelector('.question-div').textContent = questionText;
+  cardElement.querySelector('.answer-div').textContent = answerText;
+};
 
 const createCard = (questionText, answerText) => {
   toggleCreationBoxView();
@@ -58,8 +58,8 @@ const createCard = (questionText, answerText) => {
   editionIcon.classList.add('bi', 'bi-pencil-square');
   editionButton.appendChild(editionIcon);
   //editionButton.addEventListener('click', editCard(event.target));
-  //editionButton.addEventListener('click', editCard);
-  editionButton.addEventListener('click', (event) => editCard(event));
+  editionButton.addEventListener('click', editCard);
+  //editionButton.addEventListener('click', (event) => editCard(event));
 
   /* Botão de remoção de cartão */
   const deletionButton = document.createElement('button');
@@ -69,8 +69,8 @@ const createCard = (questionText, answerText) => {
   deletionIcon.classList.add('bi', 'bi-trash');
   deletionButton.appendChild(deletionIcon);
   //deletionButton.addEventListener('click', deleteCard(event.target));
-  //deletionButton.addEventListener('click', deleteCard);
-  deletionButton.addEventListener('click', (event) => deleteCard(event));
+  deletionButton.addEventListener('click', deleteCard);
+  //deletionButton.addEventListener('click', (event) => deleteCard(event));
 
   /* Container de botões de edição e exclusão */
   const buttonsContainer = document.createElement('div');
@@ -87,6 +87,7 @@ const createCard = (questionText, answerText) => {
 }
 
 const getInputs = () => {
+  toggleCreationBoxView();
   const questionInput = document.querySelector('#question');
   const answerInput = document.querySelector('#answer');
   let questionText = questionInput.value;
@@ -106,6 +107,7 @@ addCardButton.addEventListener('click', toggleCreationBoxView);
 closeCreationBoxButton.addEventListener('click', toggleCreationBoxView);
 saveButton.addEventListener('click', () => {
   const question = getInputs();
+  toggleCreationBoxView();
   let {questionText, answerText} = question;
   addCard(questionText, answerText);
 });
