@@ -1,123 +1,111 @@
-const container = document.querySelector(".container");
-const addQuestionCard = document.getElementById("add-question-card");
-const cardButton = document.getElementById("save-btn");
-const question = document.getElementById("question");
-const answer = document.getElementById("answer");
-const errorMessage = document.getElementById("error");
-const addQuestion = document.getElementById("add-flashcard");
-const closeBtn = document.getElementById("close-btn");
-let editBool = false;
+const saveButton = document.querySelector('#save-btn');
+const addCardButton = document.querySelector('#add-flashcard');
+const closeCreationBoxButton = document.querySelector('#close-btn');
+const cards = [];
 
-//Add question when user clicks 'Add Flashcard' button
-addQuestion.addEventListener("click", () => {
-  container.classList.add("hide");
-  question.value = "";
-  answer.value = "";
-  addQuestionCard.classList.remove("hide");
-});
+const toggleCreationBoxView = () => {
+  const creationBoxElement = document.querySelector('#add-question-card');
 
-//Hide Create flashcard Card
-closeBtn.addEventListener(
-  "click",
-  (hideQuestion = () => {
-    container.classList.remove("hide");
-    addQuestionCard.classList.add("hide");
-    if (editBool) {
-      editBool = false;
-      submitQuestion();
-    }
-  })
-);
-
-//Submit Question
-cardButton.addEventListener(
-  "click",
-  (submitQuestion = () => {
-    editBool = false;
-    tempQuestion = question.value.trim();
-    tempAnswer = answer.value.trim();
-    if (!tempQuestion || !tempAnswer) {
-      errorMessage.classList.remove("hide");
-    } else {
-      container.classList.remove("hide");
-      errorMessage.classList.add("hide");
-      viewlist();
-      question.value = "";
-      answer.value = "";
-    }
-  })
-);
-
-//Card Generate
-function viewlist() {
-  var listCard = document.getElementsByClassName("card-list-container");
-  var div = document.createElement("div");
-  div.classList.add("card");
-  //Question
-  div.innerHTML += `
-  <p class="question-div">${question.value}</p>`;
-  //Answer
-  var displayAnswer = document.createElement("p");
-  displayAnswer.classList.add("answer-div", "hide");
-  displayAnswer.innerText = answer.value;
-
-  //Link to show/hide answer
-  var link = document.createElement("a");
-  link.setAttribute("href", "#");
-  link.setAttribute("class", "show-hide-btn");
-  link.innerHTML = "Show/Hide";
-  link.addEventListener("click", () => {
-    displayAnswer.classList.toggle("hide");
-  });
-
-  div.appendChild(link);
-  div.appendChild(displayAnswer);
-
-  //Edit button
-  let buttonsCon = document.createElement("div");
-  buttonsCon.classList.add("buttons-con");
-  var editButton = document.createElement("button");
-  editButton.setAttribute("class", "edit");
-  editButton.innerHTML = `<i class="bi bi-pencil-square"></i>`;
-  editButton.addEventListener("click", () => {
-    editBool = true;
-    modifyElement(editButton, true);
-    addQuestionCard.classList.remove("hide");
-  });
-  buttonsCon.appendChild(editButton);
-  disableButtons(false);
-
-  //Delete Button
-  var deleteButton = document.createElement("button");
-  deleteButton.setAttribute("class", "delete");
-  deleteButton.innerHTML = `<i class="bi bi-trash"></i>`;
-  deleteButton.addEventListener("click", () => {
-    modifyElement(deleteButton);
-  });
-  buttonsCon.appendChild(deleteButton);
-
-  div.appendChild(buttonsCon);
-  listCard[0].appendChild(div);
-  hideQuestion();
+  creationBoxElement.classList.toggle('hide');
 }
 
-//Modify Elements
-const modifyElement = (element, edit = false) => {
-  let parentDiv = element.parentElement.parentElement;
-  let parentQuestion = parentDiv.querySelector(".question-div").innerText;
-  if (edit) {
-    let parentAns = parentDiv.querySelector(".answer-div").innerText;
-    answer.value = parentAns;
-    question.value = parentQuestion;
-    disableButtons(true);
-  }
-  parentDiv.remove();
-};
+const deleteCard = (event) => {
+  const cardElement = event.target.closest('.card');
 
-//Disable edit and delete buttons
-const disableButtons = (value) => {
-  let editButtons = document.getElementsByClassName("edit");
-  Array.from(editButtons).forEach((element) => {
-    element.disabled = value;
+  cardElement.remove();
+}
+
+/* Cria um cartão com novos valores e remove o cartão com valores antigos */
+const editCard = (event) => {
+  const question = getInputs();
+  let {questionText, answerText} = question;
+  
+  addCard(questionText, answerText);
+  deleteCard(event);
+}
+
+
+const createCard = (questionText, answerText) => {
+  toggleCreationBoxView();
+
+  /* Cartão */
+  const cardElement = document.createElement('div');
+  cardElement.classList.add('card');
+
+  /* Pergunta */
+  const questionElement = document.createElement('p');
+  questionElement.classList.add('question-div');
+  questionElement.textContent = questionText;
+
+  /* Resposta */
+  const answerElement = document.createElement('p');
+  answerElement.classList.add('answer-div', 'hide');
+  answerElement.textContent = answerText;
+
+  /* Botão mostrar/esconder resposta */
+  const toggleAnswerViewButton = document.createElement('button');
+  toggleAnswerViewButton.classList.add('show-hide-btn');
+  toggleAnswerViewButton.textContent = 'Mostrar / Esconder';
+  toggleAnswerViewButton.addEventListener('click', () => {
+    answerElement.classList.toggle('hide');
   });
-};
+
+  /* Botão de edição de cartão */
+  const editionButton = document.createElement('button');
+  editionButton.type = 'button';
+  editionButton.classList.add('edit');
+  const editionIcon = document.createElement('i');
+  editionIcon.classList.add('bi', 'bi-pencil-square');
+  editionButton.appendChild(editionIcon);
+  //editionButton.addEventListener('click', editCard(event.target));
+  //editionButton.addEventListener('click', editCard);
+  editionButton.addEventListener('click', (event) => editCard(event));
+
+  /* Botão de remoção de cartão */
+  const deletionButton = document.createElement('button');
+  deletionButton.type = 'button';
+  deletionButton.classList.add('delete');
+  const deletionIcon = document.createElement('i');
+  deletionIcon.classList.add('bi', 'bi-trash');
+  deletionButton.appendChild(deletionIcon);
+  //deletionButton.addEventListener('click', deleteCard(event.target));
+  //deletionButton.addEventListener('click', deleteCard);
+  deletionButton.addEventListener('click', (event) => deleteCard(event));
+
+  /* Container de botões de edição e exclusão */
+  const buttonsContainer = document.createElement('div');
+  buttonsContainer.classList.add('buttons-con');
+  buttonsContainer.appendChild(editionButton);
+  buttonsContainer.appendChild(deletionButton);
+
+  cardElement.appendChild(questionElement);
+  cardElement.appendChild(toggleAnswerViewButton);
+  cardElement.appendChild(answerElement);
+  cardElement.appendChild(buttonsContainer);
+
+  return cardElement;
+}
+
+const getInputs = () => {
+  const questionInput = document.querySelector('#question');
+  const answerInput = document.querySelector('#answer');
+  let questionText = questionInput.value;
+  let answerText = answerInput.value;
+
+  return {questionText: questionText, answerText: answerText};
+}
+
+const addCard = (questionText, answerText) => {
+  const card = createCard(questionText, answerText);
+  const cardsContainer = document.querySelector('.card-list-container');
+
+  cardsContainer.appendChild(card);
+}
+
+addCardButton.addEventListener('click', toggleCreationBoxView);
+closeCreationBoxButton.addEventListener('click', toggleCreationBoxView);
+saveButton.addEventListener('click', () => {
+  const question = getInputs();
+  let {questionText, answerText} = question;
+  addCard(questionText, answerText);
+});

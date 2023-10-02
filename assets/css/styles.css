@@ -218,3 +218,7 @@ textarea:focus {
     gap: 1.2em;
   }
 }
+
+.show-hide-btn {
+  padding: 10px;
+}
