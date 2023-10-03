@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Flashcards</title>
+  <title>Lang Cards</title>
   <link rel="shortcut icon" href="assets/img/favicon.ico" type="image/x-icon" />
   <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
@@ -18,46 +18,23 @@
   <script defer src="assets/js/app.js"></script>
 </head>
 <body>
-  <header>
-    <div class="container">
-      <div class="add-flashcard-con">
-        <button id="add-flashcard">Adicionar Flashcard</button>
-      </div>
-    </div>
-  </header>
   <main>
-    <div class="container">
-      <!-- Display Card of Question And Answers Here -->
-      <div id="card-con">
-        <div class="card-list-container"></div>
-      </div>
-    </div>
-    <!-- Input form for users to fill question and answer -->
-    <div class="question-container hide" id="add-question-card">
-      <h2>Adicionar Flashcard</h2>
-      <div class="wrapper">
-        <!-- Error message -->
-        <div class="error-con">
-          <span class="hide" id="error">Campos de entrada não podem ficar vazios!</span>
+    <div id="container">
+      <h1 id="title">Lang Cards</h1>
+      <div id="inputs-container">
+        <div id="card-front-input-container">
+          <label for="card-front-input">Frente</label>
+          <input type="text" id="card-front-input" placeholder="Palavra da frente" autocomplete="off" />
         </div>
-        <!-- Close Button -->
-        <i class="bi bi-x" id="close-btn"></i>
+        <div id="card-back-input-container">
+          <label for="card-back-input">Verso</label>
+          <input type="text" id="card-back-input" placeholder="Palavra do verso" autocomplete="off" />
+        </div>
+        <button id="add-card-button">Adicionar cartão</button>
       </div>
-      <label for="question">Pergunta:</label>
-      <textarea
-        class="input"
-        id="question"
-        placeholder="Digite sua pergunta aqui..."
-        rows="2"
-      ></textarea>
-      <label for="answer">Resposta:</label>
-      <textarea
-        class="input"
-        id="answer"
-        rows="4"
-        placeholder="Digite sua pergunta aqui..."
-      ></textarea>
-      <button id="save-btn">Salvar</button>
+      <ul id="cards-container">
+        <!-- Os cartões serão renderizados aqui -->
+      </ul>
     </div>
   </main>
 </body>

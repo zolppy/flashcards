@@ -1,144 +1,113 @@
-const saveButton = document.querySelector('#save-btn');
-const addCardButton = document.querySelector('#add-flashcard');
-const closeCreationBoxButton = document.querySelector('#close-btn');
+const addCardButton = document.querySelector('#add-card-button');
+const deleteCardButton = document.querySelector('.delete-card-button');
 const cards = [];
 
-const toggleCreationBoxView = () => {
-  const creationBoxElement = document.querySelector('#add-question-card');
+const getInputs = () => {
+  const cardFrontInput = document.querySelector('#card-front-input');
+  const cardBackInput = document.querySelector('#card-back-input');
+  let cardFrontText = cardFrontInput.value;
+  let cardBackText = cardBackInput.value;
 
-  creationBoxElement.classList.toggle('hide');
+  return { cardFrontText: cardFrontText, cardBackText: cardBackText };
 }
 
-/* Remove elementos do DOM, do array e do armazenamento local */
-const deleteCard = (event) => {
-  const cardElement = event.target.closest('.card');
-  const questionInput = cardElement.querySelector('.question-div');
-  const answerInput = cardElement.querySelector('.answer-div');
-  let index = cards.indexOf({questionText: questionInput.value, answerText: answerInput.value});
-  cards.splice(index, 1);
-
-  localStorage.setItem('cards', JSON.stringify(cards));
-
-  cardElement.remove();
-}
-
-/* Não é a melhor solução */
-const editCard = (event) => {
-  const cardElement = event.target.closest('.card');
-
-  toggleCreationBoxView();
-  const question = getInputs();
-  let {questionText, answerText} = question;
-
-  const questionInput = cardElement.querySelector('.question-div');
-  const answerInput = cardElement.querySelector('.answer-div');
-
-  questionInput.textContent = questionText;
-  answerInput.textContent = answerText;
-
-  deleteCard(event);
-};
-
-const createCard = (questionText, answerText) => {
+const createCard = (cardFrontText, cardBackText) => {
   /* Cartão */
-  const cardElement = document.createElement('div');
+  const cardElement = document.createElement('li');
   cardElement.classList.add('card');
+  cardElement.addEventListener('click', (event) => toggleShowCardBack(event, cardFrontText, cardBackText));
 
-  /* Pergunta */
-  const questionElement = document.createElement('p');
-  questionElement.classList.add('question-div');
-  questionElement.textContent = questionText;
+  /* Texto da frente do cartão */
+  const cardTextElement = document.createElement('span');
+  cardTextElement.classList.add('card-text');
+  cardTextElement.textContent = cardFrontText;
 
-  /* Resposta */
-  const answerElement = document.createElement('p');
-  answerElement.classList.add('answer-div', 'hide');
-  answerElement.textContent = answerText;
+  /* Botão de exclusão do cartão */
+  const deleteCardButton = document.createElement('button');
+  deleteCardButton.type = 'button';
+  deleteCardButton.classList.add('delete-card-button');
+  deleteCardButton.addEventListener('click', (event) => deleteCard(event, cardFrontText, cardBackText));
 
-  /* Botão mostrar/esconder resposta */
-  const toggleAnswerViewButton = document.createElement('button');
-  toggleAnswerViewButton.classList.add('show-hide-btn');
-  toggleAnswerViewButton.textContent = 'Mostrar / Esconder';
-  toggleAnswerViewButton.addEventListener('click', () => {
-    answerElement.classList.toggle('hide');
-  });
+  /* Ícone do botão */
+  const deleteCardButtonIcon = document.createElement('i');
+  deleteCardButtonIcon.classList.add('bi', 'bi-trash');
 
-  /* Botão de edição de cartão */
-  const editionButton = document.createElement('button');
-  editionButton.type = 'button';
-  editionButton.classList.add('edit');
-  const editionIcon = document.createElement('i');
-  editionIcon.classList.add('bi', 'bi-pencil-square');
-  editionButton.appendChild(editionIcon);
-  editionButton.addEventListener('click', editCard);
+  deleteCardButton.appendChild(deleteCardButtonIcon);
 
-  /* Botão de remoção de cartão */
-  const deletionButton = document.createElement('button');
-  deletionButton.type = 'button';
-  deletionButton.classList.add('delete');
-  const deletionIcon = document.createElement('i');
-  deletionIcon.classList.add('bi', 'bi-trash');
-  deletionButton.appendChild(deletionIcon);
-  deletionButton.addEventListener('click', deleteCard);
-
-  /* Container de botões de edição e exclusão */
-  const buttonsContainer = document.createElement('div');
-  buttonsContainer.classList.add('buttons-con');
-  buttonsContainer.appendChild(editionButton);
-  buttonsContainer.appendChild(deletionButton);
-
-  cardElement.appendChild(questionElement);
-  cardElement.appendChild(toggleAnswerViewButton);
-  cardElement.appendChild(answerElement);
-  cardElement.appendChild(buttonsContainer);
+  cardElement.appendChild(cardTextElement);
+  cardElement.appendChild(deleteCardButton);
 
   return cardElement;
 }
 
-const loadCards = () => {
+const addCard = (cardFrontText, cardBackText) => {
+  const cardElement = createCard(cardFrontText, cardBackText);
+  const cardsContainer = document.querySelector('#cards-container');
+
+  cardsContainer.append(cardElement);
+}
+
+const loadFromStorage = () => {
   const storedCards = JSON.parse(localStorage.getItem('cards'));
 
   if (storedCards) {
     for (const storedCard of storedCards) {
-      cards.push(storedCard)
-      let {questionText, answerText} = storedCard;
-      addCard(questionText, answerText);
+      let { cardFrontText, cardBackText } = storedCard;
+      addCard(cardFrontText, cardBackText);
+      cards.push(storedCard);
     }
+  } else {
+    const defaultCards = [
+      { cardFrontText: 'Amor', cardBackText: 'Love' },
+      { cardFrontText: 'Carinho', cardBackText: 'Kindness' },
+      { cardFrontText: 'Afeto', cardBackText: 'Affection' }
+    ];
+
+    defaultCards.forEach((defaultCard) => {
+      let { cardFrontText, cardBackText } = defaultCard;
+      addCard(cardFrontText, cardBackText);
+      cards.push(defaultCard);
+    });
+    
+    localStorage.setItem('cards', JSON.stringify(cards));
   }
 }
 
-const clearInputs = () => {
-  const questionInput = document.querySelector('#question');
-  const answerInput = document.querySelector('#answer');
-  questionInput.value = '';
-  answerInput.value = '';
+/* Bug aqui */
+const deleteCard = (event, cardFrontText, cardBackText) => {
+  const cardElement = event.target.closest('.card');
+  const card = { cardFrontText: cardFrontText, cardBackText: cardBackText };
+  let index = cards.indexOf(card);
+
+  cards.splice(index, 1);
+
+  if (cards.length >= 1) {
+    localStorage.setItem('cards', JSON.stringify(cards));
+  } else {
+    localStorage.setItem('cards', JSON.stringify(null));
+    location.reload();
+  }
+
+  cardElement.remove();
 }
 
-const getInputs = () => {
-  const questionInput = document.querySelector('#question');
-  const answerInput = document.querySelector('#answer');
-  let questionText = questionInput.value;
-  let answerText = answerInput.value;
-  clearInputs();
+const toggleShowCardBack = (event, cardFrontText, cardBackText) => {
+  const cardElement = event.target;
+  const cardTextElement = cardElement.querySelector('.card-text');
+  let cardText = cardTextElement.textContent;
 
-  return {questionText: questionText, answerText: answerText};
+  if (cardText === cardFrontText) {
+    cardTextElement.textContent = cardBackText;
+  } else {
+    cardTextElement.textContent = cardFrontText;
+  }
 }
 
-const addCard = (questionText, answerText) => {
-  const card = createCard(questionText, answerText);
-  const cardsContainer = document.querySelector('.card-list-container');
-
-  cardsContainer.appendChild(card);
-}
-
-window.addEventListener('load', loadCards);
-addCardButton.addEventListener('click', toggleCreationBoxView);
-closeCreationBoxButton.addEventListener('click', toggleCreationBoxView);
-saveButton.addEventListener('click', () => {
-  const question = getInputs();
-  toggleCreationBoxView();
-  let {questionText, answerText} = question;
-  addCard(questionText, answerText);
-  /* Adiciona objeto ao array e armazena este localmente */
-  cards.push({ questionText: questionText, answerText: answerText });
+window.addEventListener('load', loadFromStorage);
+addCardButton.addEventListener('click', () => {
+  const card = getInputs()
+  let { cardFrontText, cardBackText } = card;
+  addCard(cardFrontText, cardBackText);
+  cards.push(card);
   localStorage.setItem('cards', JSON.stringify(cards));
 });
