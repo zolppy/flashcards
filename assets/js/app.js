@@ -73,13 +73,17 @@ const loadFromStorage = () => {
   }
 }
 
-/* Bug aqui */
 const deleteCard = (event, cardFrontText, cardBackText) => {
   const cardElement = event.target.closest('.card');
-  const card = { cardFrontText: cardFrontText, cardBackText: cardBackText };
-  let index = cards.indexOf(card);
 
-  cards.splice(index, 1);
+  event.stopPropagation();
+
+  /* Remover elemento do array da forma convencional gera bugs */
+  cards.forEach((card, index, cards) => {
+    if (card.cardFrontText === cardFrontText && card.cardBackText === cardBackText) {
+      cards.splice(index, 1);
+    }
+  });
 
   if (cards.length >= 1) {
     localStorage.setItem('cards', JSON.stringify(cards));
