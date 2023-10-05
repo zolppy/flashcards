@@ -5,7 +5,7 @@
   --soft-black: #333;
 }
 
-/* A maioria dos resets de estilos são feitos no arquivo "reset.css" */
+/* A maioria do reset de estilos é feito no arquivo "reset.css" */
 * {
   font-family: 'Poppins', sans-serif;
   box-sizing: border-box;
