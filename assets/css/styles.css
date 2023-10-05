@@ -5,6 +5,7 @@
   --soft-black: #333;
 }
 
+/* A maioria dos resets de estilos são feitos no arquivo "reset.css" */
 * {
   font-family: 'Poppins', sans-serif;
   box-sizing: border-box;
@@ -13,7 +14,6 @@
 body {
   color: var(--soft-black);
   background-color: var(--soft-white);
-  height: 100vh;
   display: flex;
   justify-content: center;
 }
@@ -21,6 +21,10 @@ body {
 #container {
   margin-top: 50px;
   width: 95vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 #title {
@@ -52,7 +56,7 @@ body {
   font-size: 1rem;
 }
 
-button {
+#add-card-button {
   border: 1px solid var(--soft-black);
   padding: 2px 5px;
   background-color: #fff;
@@ -62,13 +66,17 @@ button {
   transition: .3s ease-in;
 }
 
-button:hover {
+#add-card-button:hover {
   transform: scale(95%);
   cursor: pointer;
 }
 
-button:active {
+#add-card-button:active {
   background-color: var(--soft-white);
+}
+
+#cards-total {
+  padding-bottom: 35px;
 }
 
 #cards-container {
@@ -101,15 +109,23 @@ button:active {
 }
 
 .front {
-  background-color: #e5ffe5;
+  background-color: #bbffbb;
 }
 
 .back {
-  background-color: #e5e5ff;
+  background-color: #bbbbff;
 }
 
 .delete-card-button {
-  padding: 7px 10px;
   margin-bottom: 5px;
-  background-color: #ffe5e5;
+  font-size: 20px;
+  background-color: transparent;
+  border: none;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.delete-card-button:hover {
+  transform: scale(95%);
+  cursor: pointer;
 }

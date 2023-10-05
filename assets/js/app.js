@@ -8,9 +8,15 @@ const getInputs = () => {
   let cardFrontText = cardFrontInput.value;
   let cardBackText = cardBackInput.value;
 
-  clearInputs();
+  if (cardFrontText && cardBackText) {
+    clearInputs();
+  
+    return { cardFrontText: cardFrontText, cardBackText: cardBackText };
+  } else {
+    alert('Insira uma palavra para frente e verso do cartão.');
+  }
 
-  return { cardFrontText: cardFrontText, cardBackText: cardBackText };
+  return null;
 }
 
 const createCard = (cardFrontText, cardBackText) => {
@@ -48,6 +54,7 @@ const addCard = (cardFrontText, cardBackText) => {
   const cardsContainer = document.querySelector('#cards-container');
 
   cardsContainer.append(cardElement);
+  updateCardsTotal();
 }
 
 const loadFromStorage = () => {
@@ -81,21 +88,24 @@ const deleteCard = (event, cardFrontText, cardBackText) => {
 
   event.stopPropagation();
 
-  /* Remover elemento do array da forma convencional gera bugs, por isso foi optado por esta forma */
-  cards.forEach((card, index, cards) => {
-    if (card.cardFrontText === cardFrontText && card.cardBackText === cardBackText) {
-      cards.splice(index, 1);
+  if (confirm('Tem certeza que deseja excluir o cartão?!')) {
+    /* Remover elemento do array da forma convencional gera bugs, por isso foi optado por esta forma */
+    cards.forEach((card, index, cards) => {
+      if (card.cardFrontText === cardFrontText && card.cardBackText === cardBackText) {
+        cards.splice(index, 1);
+      }
+    });
+  
+    if (cards.length >= 1) {
+      localStorage.setItem('cards', JSON.stringify(cards));
+    } else {
+      localStorage.setItem('cards', JSON.stringify(null));
+      location.reload();
     }
-  });
-
-  if (cards.length >= 1) {
-    localStorage.setItem('cards', JSON.stringify(cards));
-  } else {
-    localStorage.setItem('cards', JSON.stringify(null));
-    location.reload();
+  
+    cardElement.remove();
+    updateCardsTotal();
   }
-
-  cardElement.remove();
 }
 
 const clearInputs = () => {
@@ -106,6 +116,15 @@ const clearInputs = () => {
   cardBackInput.value = '';
 
   cardFrontInput.focus();
+}
+
+const updateCardsTotal = () => {
+  const cardsContainer = document.querySelector('#cards-container');
+  const thisCards = cardsContainer.querySelectorAll('.card');
+  const cardsTotalContainer = document.querySelector('#cards-total');
+  let cardsTotal = thisCards.length;
+
+  cardsTotalContainer.textContent = `Total de cartões: ${cardsTotal}`;
 }
 
 const toggleShowCardBack = (event, cardFrontText, cardBackText) => {
@@ -125,8 +144,10 @@ const toggleShowCardBack = (event, cardFrontText, cardBackText) => {
 window.addEventListener('load', loadFromStorage);
 addCardButton.addEventListener('click', () => {
   const card = getInputs()
-  let { cardFrontText, cardBackText } = card;
-  addCard(cardFrontText, cardBackText);
-  cards.push(card);
-  localStorage.setItem('cards', JSON.stringify(cards));
+  if (card) {
+    let { cardFrontText, cardBackText } = card;
+    addCard(cardFrontText, cardBackText);
+    cards.push(card);
+    localStorage.setItem('cards', JSON.stringify(cards));
+  }
 });
