@@ -65,7 +65,7 @@ body {
 #add-card-button,
 .front,
 .back {
-  transition: .3s ease-in;
+  transition: .3s ease-in-out;
 }
 
 #add-card-button {
