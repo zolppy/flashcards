@@ -3,6 +3,8 @@
 :root {
   --soft-white: #efefef;
   --soft-black: #333;
+  --card-front-color: #bbbbff;
+  --card-back-color: #bbffbb;
 }
 
 /* A maioria do reset de estilos é feito no arquivo "reset.css" */
@@ -33,14 +35,18 @@ body {
   text-align: center;
 }
 
-#inputs-container {
-  gap: 15px;
-  width: 325px;
-  margin: 35px auto;
+#inputs-container,
+.card {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+#inputs-container {
+  gap: 15px;
+  width: 325px;
+  margin: 35px auto;
 }
 
 #inputs-container input {
@@ -56,6 +62,12 @@ body {
   font-size: 1rem;
 }
 
+#add-card-button,
+.front,
+.back {
+  transition: .3s ease-in;
+}
+
 #add-card-button {
   border: 1px solid var(--soft-black);
   padding: 2px 5px;
@@ -63,10 +75,11 @@ body {
   color: inherit;
   border-radius: 5px;
   outline-color: blue;
-  transition: .3s ease-in;
 }
 
-#add-card-button:hover {
+#add-card-button:hover,
+.card:hover,
+.delete-card-button:hover {
   transform: scale(95%);
   cursor: pointer;
 }
@@ -91,17 +104,6 @@ body {
   border-radius: 10px;
   width: 150px;
   height: 242px;
-  background-color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transition: .3s ease-in;
-}
-
-.card:hover {
-  transform: scale(95%);
-  cursor: pointer;
 }
 
 .card-text {
@@ -109,23 +111,15 @@ body {
 }
 
 .front {
-  background-color: #bbffbb;
+  background-color: var(--card-front-color);
 }
 
 .back {
-  background-color: #bbbbff;
+  background-color: var(--card-back-color);
 }
 
 .delete-card-button {
-  margin-bottom: 5px;
   font-size: 20px;
   background-color: transparent;
   border: none;
-  padding-top: 0;
-  padding-bottom: 0;
-}
-
-.delete-card-button:hover {
-  transform: scale(95%);
-  cursor: pointer;
 }
