@@ -143,7 +143,7 @@ const toggleShowCardBack = (event, cardFrontText, cardBackText) => {
 
 window.addEventListener('load', loadFromStorage);
 addCardButton.addEventListener('click', () => {
-  const card = getInputs()
+  const card = getInputs();
   if (card) {
     let { cardFrontText, cardBackText } = card;
     addCard(cardFrontText, cardBackText);
