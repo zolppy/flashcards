@@ -5,10 +5,14 @@
   --soft-black: #333;
 }
 
+* {
+  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
+}
+
 body {
   color: var(--soft-black);
   background-color: var(--soft-white);
-  font-family: 'Poppins', sans-serif;
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -26,11 +30,28 @@ body {
 }
 
 #inputs-container {
-  margin-top: 35px;
-  display: flex;
-  justify-content: center;
-  flex-wrap: nowrap;
   gap: 15px;
+  margin-top: 35px;
+  width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#inputs-container input {
+  height: 27px;
+  width: 180px;
+  outline-color: blue;
+  border-radius: 10px;
+  border: 1px solid var(--soft-black);
+}
+
+#inputs-container input::placeholder {
+  text-align: center;
+  font-size: 1rem;
 }
 
 button {
@@ -39,6 +60,8 @@ button {
   background-color: #fff;
   color: inherit;
   border-radius: 5px;
+  outline-color: blue;
+  transition: .3s ease-in;
 }
 
 button:hover {
@@ -68,6 +91,7 @@ button:active {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  transition: .3s ease-in;
 }
 
 .card:hover {
@@ -77,6 +101,14 @@ button:active {
 
 .card-text {
   margin: auto 0;
+}
+
+.front {
+  background-color: #e4e5ff;
+}
+
+.back {
+  background-color: #e4ffe5;
 }
 
 .delete-card-button {

@@ -8,19 +8,22 @@ const getInputs = () => {
   let cardFrontText = cardFrontInput.value;
   let cardBackText = cardBackInput.value;
 
+  clearInputs();
+
   return { cardFrontText: cardFrontText, cardBackText: cardBackText };
 }
 
 const createCard = (cardFrontText, cardBackText) => {
   /* Cartão */
   const cardElement = document.createElement('li');
-  cardElement.classList.add('card');
+  cardElement.classList.add('card', 'front');
   cardElement.addEventListener('click', (event) => toggleShowCardBack(event, cardFrontText, cardBackText));
 
   /* Texto da frente do cartão */
   const cardTextElement = document.createElement('span');
   cardTextElement.classList.add('card-text');
   cardTextElement.textContent = cardFrontText;
+  cardTextElement.style.fontWeight = 'bold';
 
   /* Botão de exclusão do cartão */
   const deleteCardButton = document.createElement('button');
@@ -78,7 +81,7 @@ const deleteCard = (event, cardFrontText, cardBackText) => {
 
   event.stopPropagation();
 
-  /* Remover elemento do array da forma convencional gera bugs */
+  /* Remover elemento do array da forma convencional gera bugs, por isso foi optado por esta forma */
   cards.forEach((card, index, cards) => {
     if (card.cardFrontText === cardFrontText && card.cardBackText === cardBackText) {
       cards.splice(index, 1);
@@ -95,6 +98,16 @@ const deleteCard = (event, cardFrontText, cardBackText) => {
   cardElement.remove();
 }
 
+const clearInputs = () => {
+  const cardFrontInput = document.querySelector('#card-front-input');
+  const cardBackInput = document.querySelector('#card-back-input');
+
+  cardFrontInput.value = '';
+  cardBackInput.value = '';
+
+  cardFrontInput.focus();
+}
+
 const toggleShowCardBack = (event, cardFrontText, cardBackText) => {
   const cardElement = event.target;
   const cardTextElement = cardElement.querySelector('.card-text');
@@ -102,8 +115,10 @@ const toggleShowCardBack = (event, cardFrontText, cardBackText) => {
 
   if (cardText === cardFrontText) {
     cardTextElement.textContent = cardBackText;
+    cardElement.classList.replace('front', 'back');
   } else {
     cardTextElement.textContent = cardFrontText;
+    cardElement.classList.replace('back', 'front');
   }
 }
 
