@@ -31,10 +31,8 @@ body {
 
 #inputs-container {
   gap: 15px;
-  margin-top: 35px;
-  width: 400px;
-  margin-left: auto;
-  margin-right: auto;
+  width: 325px;
+  margin: 35px auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -75,7 +73,6 @@ button:active {
 
 #cards-container {
   gap: 5px;
-  margin-top: 15px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -104,14 +101,15 @@ button:active {
 }
 
 .front {
-  background-color: #e4e5ff;
+  background-color: #e5ffe5;
 }
 
 .back {
-  background-color: #e4ffe5;
+  background-color: #e5e5ff;
 }
 
 .delete-card-button {
   padding: 7px 10px;
   margin-bottom: 5px;
+  background-color: #ffe5e5;
 }
