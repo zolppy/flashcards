@@ -65,7 +65,7 @@ body {
 #add-card-button,
 .front,
 .back {
-  transition: .3s ease-in-out;
+  transition: .3s ease-out;
 }
 
 #add-card-button {
@@ -80,7 +80,7 @@ body {
 #add-card-button:hover,
 .card:hover,
 .delete-card-button:hover {
-  transform: scale(95%);
+  transform: scale(.95);
   cursor: pointer;
 }
 
@@ -93,17 +93,18 @@ body {
 }
 
 #cards-container {
-  gap: 5px;
+  gap: 15px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
 }
 
 .card {
-  border: 1px solid var(--soft-black);
   border-radius: 10px;
   width: 150px;
   height: 242px;
+  box-shadow: 3px 7px 9px rgba(0, 0, 0, .5);
 }
 
 .card-text {
