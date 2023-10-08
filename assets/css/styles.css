@@ -63,8 +63,7 @@ body {
 }
 
 #add-card-button,
-.front,
-.back {
+.card {
   transition: .3s ease-out;
 }
 
@@ -88,6 +87,14 @@ body {
   background-color: var(--soft-white);
 }
 
+.delete-card-button {
+  font-size: 20px;
+  background-color: transparent;
+  border: none;
+  position: absolute;
+  bottom: 0;
+}
+
 #cards-total {
   padding-bottom: 35px;
 }
@@ -100,27 +107,48 @@ body {
   justify-content: center;
 }
 
-.card {
-  border-radius: 10px;
+.flip-box {
+  background-color: transparent;
   width: 150px;
   height: 242px;
+  border: 1px solid #f1f1f1;
+  perspective: 1000px;
+}
+
+.flip-box-inner {
+  position: relative;
+  border-radius: 10px;
   box-shadow: 3px 7px 9px rgba(0, 0, 0, .5);
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
 }
 
-.card-text {
-  margin: auto 0;
+.flip-box:hover .flip-box-inner {
+  transform: rotateY(180deg);
 }
 
-.front {
+.flip-box-front, .flip-box-back {
+  border-radius: 10px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  font-weight: bold;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.flip-box-front {
   background-color: var(--card-front-color);
 }
 
-.back {
+.flip-box-back {
   background-color: var(--card-back-color);
-}
-
-.delete-card-button {
-  font-size: 20px;
-  background-color: transparent;
-  border: none;
+  transform: rotateY(180deg);
 }

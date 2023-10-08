@@ -20,16 +20,29 @@ const getInputs = () => {
 }
 
 const createCard = (cardFrontText, cardBackText) => {
-  /* Cartão */
   const cardElement = document.createElement('li');
-  cardElement.classList.add('card', 'front');
-  cardElement.addEventListener('click', (event) => toggleShowCardBack(event, cardFrontText, cardBackText));
+  cardElement.classList.add('flip-box');
 
-  /* Texto da frente do cartão */
-  const cardTextElement = document.createElement('span');
-  cardTextElement.classList.add('card-text');
-  cardTextElement.textContent = cardFrontText;
-  cardTextElement.style.fontWeight = 'bold';
+  const cardInner = document.createElement('div');
+  cardInner.classList.add('flip-box-inner');
+
+  const front = document.createElement('div');
+  front.classList.add('flip-box-front');
+
+  const frontText = document.createElement('front-text');
+  frontText.classList.add('front-text');
+  frontText.textContent = cardFrontText;
+
+  const back = document.createElement('div');
+  back.classList.add('flip-box-back');
+
+  const backText = document.createElement('back-text');
+  backText.classList.add('back-text');
+  backText.textContent = cardBackText;
+
+  /* Ícone do botão de exclusão do cartão */
+  const deleteCardButtonIcon = document.createElement('i');
+  deleteCardButtonIcon.classList.add('bi', 'bi-trash');
 
   /* Botão de exclusão do cartão */
   const deleteCardButton = document.createElement('button');
@@ -37,14 +50,23 @@ const createCard = (cardFrontText, cardBackText) => {
   deleteCardButton.classList.add('delete-card-button');
   deleteCardButton.addEventListener('click', (event) => deleteCard(event, cardFrontText, cardBackText));
 
-  /* Ícone do botão */
-  const deleteCardButtonIcon = document.createElement('i');
-  deleteCardButtonIcon.classList.add('bi', 'bi-trash');
+  const deleteCardButtonIcon2 = document.createElement('i');
+  deleteCardButtonIcon2.classList.add('bi', 'bi-trash');
 
+  const deleteCardButton2 = document.createElement('button');
+  deleteCardButton2.type = 'button';
+  deleteCardButton2.classList.add('delete-card-button');
+  deleteCardButton2.addEventListener('click', (event) => deleteCard(event, cardFrontText, cardBackText));
+  
   deleteCardButton.appendChild(deleteCardButtonIcon);
-
-  cardElement.appendChild(cardTextElement);
-  cardElement.appendChild(deleteCardButton);
+  deleteCardButton2.appendChild(deleteCardButtonIcon2);
+  front.appendChild(frontText);
+  front.appendChild(deleteCardButton);
+  back.appendChild(backText);
+  back.appendChild(deleteCardButton2);
+  cardInner.appendChild(front);
+  cardInner.appendChild(back);
+  cardElement.appendChild(cardInner);
 
   return cardElement;
 }
@@ -84,7 +106,7 @@ const loadFromStorage = () => {
 }
 
 const deleteCard = (event, cardFrontText, cardBackText) => {
-  const cardElement = event.target.closest('.card');
+  const cardElement = event.target.closest('.flip-box');
 
   event.stopPropagation();
 
