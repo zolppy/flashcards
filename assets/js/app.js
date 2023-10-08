@@ -142,7 +142,7 @@ const clearInputs = () => {
 
 const updateCardsTotal = () => {
   const cardsContainer = document.querySelector('#cards-container');
-  const thisCards = cardsContainer.querySelectorAll('.card');
+  const thisCards = cardsContainer.querySelectorAll('.flip-box');
   const cardsTotalContainer = document.querySelector('#cards-total');
   let cardsTotal = thisCards.length;
 
