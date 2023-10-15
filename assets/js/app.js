@@ -10,8 +10,20 @@ const getInputs = () => {
 
   if (cardFrontText && cardBackText) {
     clearInputs();
+
+    let cardFrontTextTreated =
+      cardFrontText[0].toUpperCase() +
+      cardFrontText.slice(1);
+    let cardBackTextTreated =
+      cardBackText[0].toUpperCase() +
+      cardBackText.slice(1)
   
-    return { cardFrontText: cardFrontText, cardBackText: cardBackText };
+    return (
+      {
+        cardFrontText: cardFrontTextTreated,
+        cardBackText: cardBackTextTreated
+      }
+    );
   } else {
     alert('Insira uma palavra para frente e verso do cartão.');
   }
